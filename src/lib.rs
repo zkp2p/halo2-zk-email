@@ -668,11 +668,11 @@ mod test {
                     &[Path::new("./test_data/bodyhash_substr_0.txt").to_path_buf()],
                 )
                 .unwrap();
-            let regex_date_decomposed: DecomposedRegexConfig = serde_json::from_reader(File::open("./test_data/date_defs.json").unwrap()).unwrap();
-            regex_date_decomposed
+            let regex_from_decomposed: DecomposedRegexConfig = serde_json::from_reader(File::open("./test_data/from_defs.json").unwrap()).unwrap();
+            regex_from_decomposed
                 .gen_regex_files(
-                    &Path::new("./test_data/date_allstr.txt").to_path_buf(),
-                    &[Path::new("./test_data/date_substr_0.txt").to_path_buf()],
+                    &Path::new("./test_data/from_allstr.txt").to_path_buf(),
+                    &[Path::new("./test_data/from_substr_0.txt").to_path_buf()],
                 )
                 .unwrap();
             let regex_body_decomposed: DecomposedRegexConfig = serde_json::from_reader(File::open("./test_data/test3_email_body_defs.json").unwrap()).unwrap();
@@ -691,16 +691,14 @@ mod test {
             let private_key = cfdkim::DkimPrivateKey::Rsa(_private_key);
             let message = concat!(
                 "From: alice@zkemail.com\r\n",
-                "To: bob@example.com\r\n",
-                "Date: Wed, 7 Jun 2023 06:32:30 +0000\r\n",
-                "user_id=3D645716473020416186&actor_id=3D",
                 "\r\n",
+                "tps://venmo.com/code?user_id=3D645716473020416186&actor_id=3D",
             )
             .as_bytes();
             let email = parse_mail(message).unwrap();
             let logger = slog::Logger::root(slog::Discard, slog::o!());
             let signer = SignerBuilder::new()
-                .with_signed_headers(&["To", "From"])
+                .with_signed_headers(&["From"])
                 .unwrap()
                 .with_private_key(private_key)
                 .with_selector("default")
