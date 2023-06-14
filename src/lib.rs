@@ -692,7 +692,7 @@ mod test {
             let message = concat!(
                 "From: alice@zkemail.com\r\n",
                 "\r\n",
-                "tps://venmo.com/code?user_id=3D645716473020416186&actor_id=3D",
+                "tps://venmo.com/code?user_id=3D123456789012345678&actor_id=3D",
             )
             .as_bytes();
             let email = parse_mail(message).unwrap();
