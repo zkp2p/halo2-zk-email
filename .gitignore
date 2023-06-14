@@ -26,3 +26,4 @@ Cargo.lock
 /benches/*.json
 *.log
 .DS_Store
+.vscode

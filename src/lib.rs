@@ -658,6 +658,83 @@ mod test {
         });
     }
 
+    #[test]
+    fn test_generated_email3() {
+        temp_env::with_var(EMAIL_VERIFY_CONFIG_ENV, Some("./configs/test3_email_verify.config"), || {
+            let regex_bodyhash_decomposed: DecomposedRegexConfig = serde_json::from_reader(File::open("./test_data/bodyhash_defs.json").unwrap()).unwrap();
+            regex_bodyhash_decomposed
+                .gen_regex_files(
+                    &Path::new("./test_data/bodyhash_allstr.txt").to_path_buf(),
+                    &[Path::new("./test_data/bodyhash_substr_0.txt").to_path_buf()],
+                )
+                .unwrap();
+            let regex_date_decomposed: DecomposedRegexConfig = serde_json::from_reader(File::open("./test_data/date_defs.json").unwrap()).unwrap();
+            regex_date_decomposed
+                .gen_regex_files(
+                    &Path::new("./test_data/date_allstr.txt").to_path_buf(),
+                    &[Path::new("./test_data/date_substr_0.txt").to_path_buf()],
+                )
+                .unwrap();
+            let regex_body_decomposed: DecomposedRegexConfig = serde_json::from_reader(File::open("./test_data/test3_email_body_defs.json").unwrap()).unwrap();
+            regex_body_decomposed
+                .gen_regex_files(
+                    &Path::new("./test_data/test3_email_body_allstr.txt").to_path_buf(),
+                    &[
+                        Path::new("./test_data/test3_email_body_substr_0.txt").to_path_buf(),
+                    ],
+                )
+                .unwrap();
+            let params = DefaultEmailVerifyCircuit::<Fr>::read_config_params();
+            let mut rng = thread_rng();
+            let _private_key = RsaPrivateKey::new(&mut rng, params.sign_verify_config.public_key_bits).expect("failed to generate a key");
+            let public_key = rsa::RsaPublicKey::from(&_private_key);
+            let private_key = cfdkim::DkimPrivateKey::Rsa(_private_key);
+            let message = concat!(
+                "From: alice@zkemail.com\r\n",
+                "To: bob@example.com\r\n",
+                "Date: Wed, 7 Jun 2023 06:32:30 +0000\r\n",
+                "user_id=3D645716473020416186&actor_id=3D",
+                "\r\n",
+            )
+            .as_bytes();
+            let email = parse_mail(message).unwrap();
+            let logger = slog::Logger::root(slog::Discard, slog::o!());
+            let signer = SignerBuilder::new()
+                .with_signed_headers(&["To", "From"])
+                .unwrap()
+                .with_private_key(private_key)
+                .with_selector("default")
+                .with_signing_domain("zkemail.com")
+                .with_logger(&logger)
+                .with_header_canonicalization(cfdkim::canonicalization::Type::Relaxed)
+                .with_body_canonicalization(cfdkim::canonicalization::Type::Relaxed)
+                .build()
+                .unwrap();
+            let signature = signer.sign(&email).unwrap();
+            println!("signature {}", signature);
+            let new_msg = vec![signature.as_bytes(), b"\r\n", message].concat();
+            let (canonicalized_header, canonicalized_body, signature_bytes) = canonicalize_signed_email(&new_msg).unwrap();
+
+            println!("canonicalized_header:\n{}", String::from_utf8(canonicalized_header.clone()).unwrap());
+            println!("canonicalized_body:\n{}", String::from_utf8(canonicalized_body.clone()).unwrap());
+
+            let e = RSAPubE::Fix(BigUint::from(DefaultEmailVerifyCircuit::<Fr>::DEFAULT_E));
+            let n_big = BigUint::from_radix_le(&public_key.n().clone().to_radix_le(16), 16).unwrap();
+            let public_key = RSAPublicKey::<Fr>::new(Value::known(BigUint::from(n_big)), e);
+            let signature = RSASignature::<Fr>::new(Value::known(BigUint::from_bytes_be(&signature_bytes)));
+            let circuit = DefaultEmailVerifyCircuit {
+                header_bytes: canonicalized_header,
+                body_bytes: canonicalized_body,
+                public_key,
+                signature,
+            };
+
+            let instances = circuit.instances();
+            let prover = MockProver::run(params.degree, &circuit, instances).unwrap();
+            assert_eq!(prover.verify(), Ok(()));
+        });
+    }
+
     #[tokio::test]
     async fn test_existing_email1() {
         let regex_bodyhash_decomposed: DecomposedRegexConfig = serde_json::from_reader(File::open("./test_data/bodyhash_defs.json").unwrap()).unwrap();
