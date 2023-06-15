@@ -692,7 +692,8 @@ mod test {
             let message = concat!(
                 "From: alice@zkemail.com\r\n",
                 "\r\n",
-                "\r\ntps://venmo.com/code?user_id=3D123456789012345678&actor_id=3D"
+                "\r\ntps://venmo.com/code?user_id=3D123456789012345678&actor_id=3D12345678912345=",
+                "\r\n67891\">\r\n                Alex Soong\r\n            </a>\r\n            <!-- action -->"
             )
             .as_bytes();
             let email = parse_mail(message).unwrap();
