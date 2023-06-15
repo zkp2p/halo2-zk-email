@@ -8,11 +8,6 @@
         },
         {
             "is_public": false,
-            "regex_def": "Content-Type: text/plain; charset=UTF-8\r\n\r\n",
-            "max_size": 43
-        },
-        {
-            "is_public": false,
             "regex_def": "\r\ntps://venmo.com/code\\?user_id=3D",
             "max_size": 33
         },
