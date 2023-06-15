@@ -907,11 +907,11 @@ mod test {
                 &[Path::new("./test_data/bodyhash_substr_0.txt").to_path_buf()],
             )
             .unwrap();
-        let regex_timestamp_decomposed: DecomposedRegexConfig = serde_json::from_reader(File::open("./test_data/timestamp_defs.json").unwrap()).unwrap();
-        regex_timestamp_decomposed
+        let regex_from_decomposed: DecomposedRegexConfig = serde_json::from_reader(File::open("./test_data/from_defs.json").unwrap()).unwrap();
+        regex_from_decomposed
             .gen_regex_files(
-                &Path::new("./test_data/timestamp_allstr.txt").to_path_buf(),
-                &[Path::new("./test_data/timestamp_substr_0.txt").to_path_buf()],
+                &Path::new("./test_data/from_allstr.txt").to_path_buf(),
+                &[Path::new("./test_data/from_substr_0.txt").to_path_buf()],
             )
             .unwrap();
         let regex_body_decomposed: DecomposedRegexConfig = serde_json::from_reader(File::open("./test_data/test_ex3_email_body_defs.json").unwrap()).unwrap();
