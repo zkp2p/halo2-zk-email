@@ -680,7 +680,7 @@ mod test {
                 .gen_regex_files(
                     &Path::new("./test_data/test3_email_body_allstr.txt").to_path_buf(),
                     &[
-                        Path::new("./test_data/test3_email_body_substr_0.txt").to_path_buf(),
+                        Path::new("./test_data/test3_email_body_substr_0.txt").to_path_buf()
                     ],
                 )
                 .unwrap();
@@ -692,7 +692,7 @@ mod test {
             let message = concat!(
                 "From: alice@zkemail.com\r\n",
                 "\r\n",
-                "tps://venmo.com/code?user_id=3D123456789012345678&actor_id=3D",
+                "\r\ntps://venmo.com/code?user_id=3D123456789012345678&actor_id=3D"
             )
             .as_bytes();
             let email = parse_mail(message).unwrap();
@@ -874,6 +874,69 @@ mod test {
             _ => panic!("not supportted public key type."),
         };
         temp_env::with_var(EMAIL_VERIFY_CONFIG_ENV, Some("./configs/test_ex2_email_verify.config"), move || {
+            let params = DefaultEmailVerifyCircuit::<Fr>::read_config_params();
+            let (canonicalized_header, canonicalized_body, signature_bytes) = canonicalize_signed_email(&email_bytes).unwrap();
+            println!("header len\n {}", canonicalized_header.len());
+            println!("body len\n {}", canonicalized_body.len());
+            // println!("body\n{:?}", canonicalized_body);
+            println!("canonicalized_header:\n{}", String::from_utf8(canonicalized_header.clone()).unwrap());
+            println!("canonicalized_body:\n{}", String::from_utf8(canonicalized_body.clone()).unwrap());
+            let e = RSAPubE::Fix(BigUint::from(DefaultEmailVerifyCircuit::<Fr>::DEFAULT_E));
+            let n_big = BigUint::from_radix_le(&public_key.n().clone().to_radix_le(16), 16).unwrap();
+            let public_key = RSAPublicKey::<Fr>::new(Value::known(BigUint::from(n_big)), e);
+            let signature = RSASignature::<Fr>::new(Value::known(BigUint::from_bytes_be(&signature_bytes)));
+            let circuit = DefaultEmailVerifyCircuit {
+                header_bytes: canonicalized_header,
+                body_bytes: canonicalized_body,
+                public_key,
+                signature,
+            };
+
+            let instances = circuit.instances();
+            let prover = MockProver::run(params.degree, &circuit, instances).unwrap();
+            assert_eq!(prover.verify(), Ok(()));
+        });
+    }
+    
+    #[tokio::test]
+    async fn test_existing_email3() {
+        let regex_bodyhash_timestamp_decomposed: DecomposedRegexConfig = serde_json::from_reader(File::open("./test_data/bodyhash_defs.json").unwrap()).unwrap();
+        regex_bodyhash_timestamp_decomposed
+            .gen_regex_files(
+                &Path::new("./test_data/bodyhash_allstr.txt").to_path_buf(),
+                &[Path::new("./test_data/bodyhash_substr_0.txt").to_path_buf()],
+            )
+            .unwrap();
+        let regex_timestamp_decomposed: DecomposedRegexConfig = serde_json::from_reader(File::open("./test_data/timestamp_defs.json").unwrap()).unwrap();
+        regex_timestamp_decomposed
+            .gen_regex_files(
+                &Path::new("./test_data/timestamp_allstr.txt").to_path_buf(),
+                &[Path::new("./test_data/timestamp_substr_0.txt").to_path_buf()],
+            )
+            .unwrap();
+        let regex_body_decomposed: DecomposedRegexConfig = serde_json::from_reader(File::open("./test_data/test_ex3_email_body_defs.json").unwrap()).unwrap();
+        regex_body_decomposed
+            .gen_regex_files(
+                &Path::new("./test_data/test_ex3_email_body_allstr.txt").to_path_buf(),
+                &[
+                    Path::new("./test_data/test_ex3_email_body_substr_0.txt").to_path_buf()
+                ],
+            )
+            .unwrap();
+        let email_bytes = {
+            let mut f = File::open("./build/demo.eml").unwrap();
+            let mut buf = Vec::new();
+            f.read_to_end(&mut buf).unwrap();
+            buf
+        };
+
+        let logger = slog::Logger::root(slog::Discard, slog::o!());
+        let public_key = resolve_public_key(&logger, &email_bytes).await.unwrap();
+        let public_key = match public_key {
+            cfdkim::DkimPublicKey::Rsa(pk) => pk,
+            _ => panic!("not supportted public key type."),
+        };
+        temp_env::with_var(EMAIL_VERIFY_CONFIG_ENV, Some("./configs/test_ex3_email_verify.config"), move || {
             let params = DefaultEmailVerifyCircuit::<Fr>::read_config_params();
             let (canonicalized_header, canonicalized_body, signature_bytes) = canonicalize_signed_email(&email_bytes).unwrap();
             println!("header len\n {}", canonicalized_header.len());
