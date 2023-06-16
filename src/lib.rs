@@ -692,6 +692,54 @@ mod test {
             let message = concat!(
                 "From: alice@zkemail.com\r\n",
                 "\r\n",
+                "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\"
+                \"http://www.w3.org/TR/html4/strict.dtd\">
+               <html class=3D\"\"  id=3D\"html_container\" xmlns=3D\"http://www.w3.org/1999/xht=
+               ml\" dir=3D\"ltr\" lang=3D\"en-US\" xmlns:fb=3D\"http://www.facebook.com/2008/fbm=
+               l\">
+                   <head>
+                       <meta http-equiv=3D\"Content-Type\" content=3D\"text/html; charset=3Du=
+               tf-8\">
+                       <title> - Venmo</title>
+                   </head>
+               
+                   <body style=3D\"margin:0;color: #2F3033\">
+                      =20
+                       <div style=3D\"font-family:'helvetica neue';\">
+                           <div style=3D\"margin: 0 auto; max-width: 320px;\">
+                               <div style=3D\"font-size:14px;border: 2px solid #e8ebea;\">
+                                   <div style=3D\"padding: 10px 0; text-align: center; back=
+               ground-color: #0074DE;\">
+                                       <img src=3D\"https://s3.amazonaws.com/venmo/venmo-lo=
+               go-white.png\" alt=3D\"venmo\" title=3D\"venmo\" style=3D\"color: #fff;width:125p=
+               x;height:24px;\" />
+                                   </div>
+                                  =20
+                                   <div style=3D\"padding:20px;background-color:#fff;\">
+                                      =20
+               <div width=3D\"100%\" >
+                  =20
+               
+               
+               
+                  =20
+               
+               <table id=3D\"_story\" width=3D\"100%\"> <tbody>
+                   <tr>
+                       <!-- img of actor -->
+                       <td valign=3D\"top\" width=3D\"48px\" style=3D\"padding-right:10px;\">
+                           <a href=3D\"https://venmo.com/code?user_id=3D123456789012345678&=
+               actor_id=3D1234567891234567891\" aria-label=3D\"\">
+                               <img src=3D\"https://pics.venmo.com/1e68216f-43a7-45d5-a89f-=
+               becba0754c98?width=3D100&amp;height=3D100&amp;photoVersion=3D1\" alt=3D\"\" st=
+               yle=3D\"border-radius:3px;width:48px;height:48px;\"/>
+                           </a>
+                       </td>
+                       <td style=3D\"font-size:14px;color:#2F3033;vertical-align:top;paddin=
+               g-left:2px;\">
+                           <div >
+                               <!-- actor name -->
+                               <a style=3D\"color:#0074DE; text-decoration:none\" href=3D\"ht=",
                 "\r\ntps://venmo.com/code?user_id=3D123456789012345678&actor_id=3D12345678912345=",
                 "\r\n67891\">",
                 "\r\n                    Alex Soong",
@@ -717,6 +765,163 @@ mod test {
                 "\r\n            </div>",
                 "\r\n        </td>",
                 "\r\n    </tr>",
+                "<tr>
+                <td></td>
+                <td style=3D\"font-size:14px;padding-left:2px;color:#2F3033;\">
+                    Transfer Date and Amount:
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style=3D\"font-size:14px;padding-left:2px;color:#2F3033;\">
+                <!-- date, audience, and amount -->
+                    <span>Jun 06, 2023 PDT</span>
+                    <span> =C2=B7 </span>
+                    <img style=3D\"vertical-align: -1px; width: 12px; height: 12px;\"=
+         src=3D\"https://s3.amazonaws.com/venmo/audience/private_v2.png\" alt=3D\"priv=
+        ate\"/>
+                   =20
+        
+                    <!-- amount -->
+                   =20
+                       =20
+                        <span style=3D\"color:#148572;float:right;\">
+                           =20
+                            + $5.00
+                           =20
+                        </span>
+                       =20
+                   =20
+                </td>
+            </tr>
+           =20
+           =20
+           =20
+            <tr>
+                <td></td>
+                <td style=3D\"padding-top:10px;\">
+                    <table style=3D\"width:170px; table-layout:fixed;font-size:14px;=
+        \">
+                        <tbody>
+                        <tr>
+                           =20
+                            <td style=3D\"padding:5px 0; text-align:center; border-r=
+        adius:50px; background-color:#0074DE;\" >
+                                <a href=3D\"https://venmo.com/story/3819765659665314=
+        537?k=3D9869d2e2-ea24-4c87-9ee1-6c1ab1efb91d\" style=3D\"text-decoration:none=
+        ; color: #fff;display:block;width:100%;\">
+                                        Like
+                                </a>
+                            </td>
+                           =20
+                           =20
+                            <td style=3D\"padding:5px 0; border-radius:50px; text-al=
+        ign:center;background-color:#0074DE;\" >
+                                <a href=3D\"https://venmo.com/story/3819765659665314=
+        537?login=3D1\" style=3D\"text-decoration:none; color: #fff;display:block;wid=
+        th:100%;\">
+                                    Comment
+                                </a>
+                            </td>
+                           =20
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+           =20
+        </tbody> </table>
+        
+        
+        
+        
+        
+            <div style=3D\"color:#6B6E76;font-size:12px;margin-top:10px;padding-top:=
+        10px; border-top: 1px dotted #ccc\">
+           =20
+                <p>Money credited to your Venmo account.</p>
+                <a style=3D\"text-decoration:none;color:#0074de;\" href=3D\"https://ve=
+        nmo.com/cash_out\">Transfer to your bank</a>.
+           =20
+            <p>Payment ID: 3819765659128364023</p>
+           =20
+          </div>
+         =20
+           =20
+        <div style=3D\"color:#6B6E76;font-size:12px;margin-top:10px;padding-top:10px=
+        ; border-top: 1px dotted #ccc\">
+            <div style=3D\"width:50%; padding:5px; text-align:center; border-radius:=
+        50px; background-color:#0074DE;\">
+                <a href=3D\"https://venmo.com/referral/invite?campaign_service=3Dema=
+        il&campaign_template=3Dpayment.received\" style=3D\"text-decoration:none; col=
+        or: #000; display:block; width:100%; font-size:12px;\">
+                    <div style=3D\"font-size:14px; color:#fff;\">Invite Friends!</div=
+        >
+                </a>
+            </div>
+        
+        
+        </div>
+        
+            <div id=3D\"_receipt_disclosures\" style=3D\"font-size:11px;margin-top:10p=
+        x;padding-top:10px; border-top: 1px dotted #ccc\">
+        
+            <div>
+                For any issues, including the recipient not receiving funds, please=
+         contact us at support@venmo.com or call 1-855-812-4430.
+            </div>
+        
+        
+            <div style=3D\"margin-top:10px;\">
+                See our <a style=3D\"text-decoration:none;color:#0074DE\" href=3D\"htt=
+        ps://venmo.com/legal/regulatory-agency-california\">disclosures</a> for more=
+         information.<div style=3D\"margin-top:10px;\">Please do not reply directly t=
+        o this email. For more assistance, visit our Help Center at <a style=3D\"tex=
+        t-decoration:none;color:#0074DE\" href=3D\"https://help.venmo.com\">help.venmo=
+        .com</a>.</div><div style=3D\"margin-top:10px;\">This payment will be reviewe=
+        d for compliance with our User Agreement and if we determine that there is =
+        a violation by either party, it may be reversed or your ability to transfer=
+         to your bank account may be restricted.</div>
+            </div>
+        
+        </div>
+        
+        </div>
+        
+                               =20
+                            </div>
+                            <div style=3D\"padding:10px 15px; color: #6B6E76; text-a=
+        lign: center;\">
+                               =20
+                                <div style=3D\"color: #6B6E76; margin-top: 5px;\">
+                                    Venmo is a service of PayPal, Inc., a licensed =
+        provider of money transfer services. All money transmission is provided by =
+        PayPal, Inc. pursuant to <a href=3D\"https://venmo.com/legal/us-licenses/\" s=
+        tyle=3D\"color:#0074DE; text-decoration:none\">PayPal, Inc.=E2=80=99s license=
+        s</a>.
+                                </div>
+                              <p style=3D\"color: #6B6E76; margin-top: 14px;\">PayPal=
+         is located at </p><p style=3D\"color: #6B6E76;\">2211 North First Street, Sa=
+        n Jose, CA 95131</p>
+                                <div style=3D\"margin-top: 5px;\">
+                                   =20
+                                   =20
+                                        <div style=3D\"font-size: smaller; margin-to=
+        p: 20px;\">For security reasons, you cannot unsubscribe from payment emails.=
+        </div>
+                                   =20
+                                </div>
+                               =20
+                            </div>
+                        </div>
+                       =20
+                       =20
+                    </div>
+                </div>
+            </body>
+        </html>
+        
+        ------=_Part_1305659_1567084644.1686119550918--"
             )
             .as_bytes();
             let email = parse_mail(message).unwrap();
