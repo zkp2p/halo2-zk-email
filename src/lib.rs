@@ -360,14 +360,14 @@ impl<F: PrimeField> Circuit<F> for DefaultEmailVerifyCircuit<F> {
                 // }
                 let range = config.sha256_config.range().clone();
                 let gate = range.gate.clone();
-                // for (idx, v) in result.header_result.masked_characters.iter().enumerate() {
-                //     v.value()
-                //         .map(|v| println!("idx {} code {} char {}", idx, v.get_lower_32(), (v.get_lower_32() as u8) as char));
-                // }
-                // for (idx, v) in result.body_result.masked_characters.iter().enumerate() {
-                //     v.value()
-                //         .map(|v| println!("idx {} code {} char {}", idx, v.get_lower_32(), (v.get_lower_32() as u8) as char));
-                // }
+                for (idx, v) in header_result.regex.masked_characters.iter().enumerate() {
+                    v.value()
+                        .map(|v| println!("idx {} code {} char {}", idx, v.get_lower_32(), (v.get_lower_32() as u8) as char));
+                }
+                for (idx, v) in body_result.regex.masked_characters.iter().enumerate() {
+                    v.value()
+                        .map(|v| println!("idx {} code {} char {}", idx, v.get_lower_32(), (v.get_lower_32() as u8) as char));
+                }
                 let assigned_public_key_bytes = assigned_public_key
                     .n
                     .limbs()
@@ -1136,11 +1136,11 @@ mod test {
                 &[Path::new("./test_data/bodyhash_substr_0.txt").to_path_buf()],
             )
             .unwrap();
-        let regex_from_decomposed: DecomposedRegexConfig = serde_json::from_reader(File::open("./test_data/from_defs.json").unwrap()).unwrap();
-        regex_from_decomposed
+        let regex_timestamp_decomposed: DecomposedRegexConfig = serde_json::from_reader(File::open("./test_data/timestamp_defs.json").unwrap()).unwrap();
+        regex_timestamp_decomposed
             .gen_regex_files(
-                &Path::new("./test_data/from_allstr.txt").to_path_buf(),
-                &[Path::new("./test_data/from_substr_0.txt").to_path_buf()],
+                &Path::new("./test_data/timestamp_allstr.txt").to_path_buf(),
+                &[Path::new("./test_data/timestamp_substr_0.txt").to_path_buf()],
             )
             .unwrap();
         let regex_body_decomposed: DecomposedRegexConfig = serde_json::from_reader(File::open("./test_data/test_ex3_email_body_defs.json").unwrap()).unwrap();
