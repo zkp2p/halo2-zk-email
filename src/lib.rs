@@ -1044,6 +1044,7 @@ mod test {
         });
     }
 
+    #[cfg(feature = "dev-graph")]
     #[tokio::test]
     async fn test_existing_email2() {
         let regex_bodyhash_decomposed: DecomposedRegexConfig = serde_json::from_reader(File::open("./test_data/bodyhash_defs.json").unwrap()).unwrap();
@@ -1121,9 +1122,21 @@ mod test {
                 signature,
             };
 
-            let instances = circuit.instances();
-            let prover = MockProver::run(params.degree, &circuit, instances).unwrap();
-            assert_eq!(prover.verify(), Ok(()));
+            // Add plotting
+            use plotters::prelude::*;
+            // Plot layout
+            let root = BitMapBackend::new("layout.png", (2048, 2048)).into_drawing_area();
+            root.fill(&WHITE).unwrap();
+            let root = root.titled("Layout", ("sans-serif", 60)).unwrap();
+            
+            halo2_base::halo2_proofs::dev::CircuitLayout::default()
+                // The first argument is the size parameter for the circuit.
+                .render((22) as u32, &circuit, &root)
+                .unwrap();
+
+            // let instances = circuit.instances();
+            // let prover = MockProver::run(params.degree, &circuit, instances).unwrap();
+            // assert_eq!(prover.verify(), Ok(()));
         });
     }
     
@@ -1194,12 +1207,12 @@ mod test {
             
             halo2_base::halo2_proofs::dev::CircuitLayout::default()
                 // The first argument is the size parameter for the circuit.
-                .render((params.degree + 1) as u32, &circuit, &root)
+                .render((22) as u32, &circuit, &root)
                 .unwrap();
 
-            // let instances = circuit.instances();
-            // let prover = MockProver::run(params.degree, &circuit, instances).unwrap();
-            // assert_eq!(prover.verify(), Ok(()));
+            let instances = circuit.instances();
+            let prover = MockProver::run(params.degree, &circuit, instances).unwrap();
+            assert_eq!(prover.verify(), Ok(()));
         });
     }
 
