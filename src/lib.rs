@@ -1208,17 +1208,17 @@ mod test {
                 signature,
             };
 
-            // Add plotting
-            use plotters::prelude::*;
-            // Plot layout
-            let root = BitMapBackend::new("layout.png", (2048, 2048)).into_drawing_area();
-            root.fill(&WHITE).unwrap();
-            let root = root.titled("Layout", ("sans-serif", 60)).unwrap();
+            // // Add plotting
+            // use plotters::prelude::*;
+            // // Plot layout
+            // let root = BitMapBackend::new("layout.png", (2048, 2048)).into_drawing_area();
+            // root.fill(&WHITE).unwrap();
+            // let root = root.titled("Layout", ("sans-serif", 60)).unwrap();
             
-            halo2_base::halo2_proofs::dev::CircuitLayout::default()
-                // The first argument is the size parameter for the circuit.
-                .render((params.degree + 1) as u32, &circuit, &root)
-                .unwrap();
+            // halo2_base::halo2_proofs::dev::CircuitLayout::default()
+            //     // The first argument is the size parameter for the circuit.
+            //     .render((params.degree + 1) as u32, &circuit, &root)
+            //     .unwrap();
 
             let instances = circuit.instances();
             let prover = MockProver::run(params.degree, &circuit, instances).unwrap();
