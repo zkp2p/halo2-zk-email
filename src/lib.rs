@@ -1207,7 +1207,7 @@ mod test {
             
             halo2_base::halo2_proofs::dev::CircuitLayout::default()
                 // The first argument is the size parameter for the circuit.
-                .render((22) as u32, &circuit, &root)
+                .render((params.degree + 1) as u32, &circuit, &root)
                 .unwrap();
 
             let instances = circuit.instances();
