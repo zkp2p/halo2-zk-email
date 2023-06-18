@@ -362,11 +362,21 @@ impl<F: PrimeField> Circuit<F> for DefaultEmailVerifyCircuit<F> {
                 let gate = range.gate.clone();
                 for (idx, v) in header_result.regex.masked_characters.iter().enumerate() {
                     v.value()
-                        .map(|v| println!("idx {} code {} char {}", idx, v.get_lower_32(), (v.get_lower_32() as u8) as char));
+                        .map(|v| {
+                            let code = v.get_lower_32();
+                            if code != 0 {
+                                println!("idx {} code {} char {}", idx, code, (code as u8) as char)
+                            }
+                        });
                 }
                 for (idx, v) in body_result.regex.masked_characters.iter().enumerate() {
                     v.value()
-                        .map(|v| println!("idx {} code {} char {}", idx, v.get_lower_32(), (v.get_lower_32() as u8) as char));
+                        .map(|v| {
+                            let code = v.get_lower_32();
+                            if code != 0 {
+                                println!("idx {} code {} char {}", idx, code, (code as u8) as char)
+                            }
+                        });
                 }
                 let assigned_public_key_bytes = assigned_public_key
                     .n
